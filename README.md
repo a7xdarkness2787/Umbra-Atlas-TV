@@ -1,23 +1,29 @@
 # Umbra Atlas
 
-Umbra Atlas is the Android presentation and playback application for the Umbra platform.
+Umbra Atlas is the Nuvio-derived media-player application maintained separately from the reusable Umbra engine platform. It is TV-first; phone and tablet support need their own verified consumer integration.
 
-The product is **TV-first** for Android TV, Google TV, Fire TV, onn. streaming devices, Nvidia Shield, and other Android-based televisions and set-top boxes. Android phones and tablets remain supported through shared application and Runtime-facing foundations.
+| Repository | Responsibility |
+| --- | --- |
+| [Umbra-Ghost-Kodi](https://github.com/a7xdarkness2787/Umbra-Ghost-Kodi) | Python engine and add-on compatibility |
+| [Umbra-Runtime](https://github.com/a7xdarkness2787/Umbra-Runtime) | Application-neutral Android SDK and qualified engine packaging |
+| Umbra-Atlas-TV | Application UI, navigation, catalogue, profiles, playback and Runtime adapter |
 
-```text
-Umbra Atlas TV / Mobile
-        ↓
-Umbra Runtime Android API
-        ↓
-Umbra Ghost Kodi
+Atlas consumes exported Maven binaries. Runtime and Ghost do not compile Atlas source or depend on Atlas tests. Other compatible applications can use the same Runtime API with their own UI and player.
+
+## Current status
+
+This repository is still a bootstrap: NuvioTV application source has not been imported. The previous import workflow references the old repository name and depends on GitHub Actions. It is not a working import path for this repository. Local Git development is the intended path while Actions billing is unavailable.
+
+The [NuvioMobilePlus Android adapter](integrations/nuvio-mobile/README.md) is preserved here as a build reference. It targets a pinned mobile upstream commit, not NuvioTV. Its app and instrumentation APKs compiled previously; physical-device smoke execution and actual playback remain unverified. Atlas owns its adapter, playback policy and device driver.
+
+Run driver unit checks independently of Runtime source:
+
+```sh
+python3 -m unittest discover -s tools/tests -v
 ```
 
-## Bootstrap status
-
-This repository is being initialized from the GPL-licensed NuvioTV `dev` history so Atlas can retain its mature TV navigation and Media3 player while adding the universal Umbra Runtime source-provider boundary.
-
-The import is performed by a repository workflow and records the exact upstream commit. Subsequent Atlas changes will be developed through tested pull requests.
+Next, import a pinned NuvioTV revision retaining source history and license notices, then implement the TV adapter against SDK binaries. Do not apply the mobile patch script to NuvioTV.
 
 ## License
 
-GNU GPL v3.0 only. See `LICENSE` and `LICENSE-NOTICE`.
+Existing project notices remain authoritative. The SDK supplies its own notices; the adapter requires the extracted SDK license directory and copies it into the consumer. Preserve the selected upstream application's license and attribution during import.
